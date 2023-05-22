@@ -1,0 +1,38 @@
+# Default ignored files
+/shelf/
+/workspace.xml
+# Editor-based HTTP Client requests
+/httpRequests/
+# Datasource local storage ignored files
+/dataSources/
+/dataSources.local.xml
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary, build with `go test -c`
+*.test
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
+
+# Dependency directories
+/vendor/
+/Godeps/
+/go/pkg/
+
+# Go Modules
+/.pnp/
+/.cache/
+/go.sum
+/go.mod
+
+# Goland IDE files
+.idea/
+
+# System-specific
+.DS_Store
+Thumbs.db
