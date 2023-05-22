@@ -15,8 +15,7 @@ func (u User) Serialize() ([]byte, error) {
 }
 
 func (u User) GetFields() [][]byte {
-	//TODO implement me
-	panic("implement me")
+	return [][]byte{u.Address, u.Password}
 }
 
 func NewUser(address []byte, password []byte) *User {
