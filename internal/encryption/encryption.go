@@ -7,12 +7,12 @@ import (
 	"crypto/rsa"
 	"crypto/sha256"
 	"crypto/x509"
-	"encoding/base64"
+	"encoding/hex"
 )
 
 //PrivateKey is used only for RSA lib operations such as public key calculation,
 //in other cases it is stored as byte array (PrivateKeyBytes).
-//For saving key it should be converted to base64 format.
+//For saving key it should be converted to hex format.
 
 // GenerateUserKeys is an implementation of register process. Returns user's public key (login) and private key (password).
 func GenerateUserKeys() (publicKeyBytes []byte, privateKeyBytes []byte, err error) {
@@ -35,23 +35,25 @@ func LogIn(privateKeyBytes []byte) (publicKeyBytes []byte, err error) {
 	}
 
 	publicKey := privateKey.PublicKey
-	publicKeyBytes, err = x509.MarshalPKIXPublicKey(&publicKey)
-	if err != nil {
-		return nil, err
-	}
+	publicKeyBytes = x509.MarshalPKCS1PublicKey(&publicKey)
 
 	return publicKeyBytes, err
 }
 
+func ValidatePublicKey(key []byte) error {
+	_, err := x509.ParsePKCS1PublicKey(key)
+	return err
+}
+
 func SerializeKey(key []byte) ([]byte, error) {
-	dst := make([]byte, base64.URLEncoding.EncodedLen(len(key)))
-	base64.URLEncoding.Encode(dst, key)
+	dst := make([]byte, hex.EncodedLen(len(key)))
+	hex.Encode(dst, key)
 	return dst, nil
 }
 
-func DeserializeKey(keyBase64 []byte) (key []byte, err error) {
-	dst := make([]byte, base64.URLEncoding.DecodedLen(len(keyBase64)))
-	_, err = base64.URLEncoding.Decode(dst, keyBase64)
+func DeserializeKey(keyBytes []byte) (key []byte, err error) {
+	dst := make([]byte, hex.DecodedLen(len(keyBytes)))
+	_, err = hex.Decode(dst, keyBytes)
 
 	return dst, err
 }
@@ -60,6 +62,14 @@ func Hash(data []byte) []byte {
 	hashWriter := sha256.New()
 	hashWriter.Write(data)
 	return hashWriter.Sum(nil)
+}
+
+func SerializeHash(hash []byte) string {
+	return hex.EncodeToString(hash)
+}
+
+func DeserializeHash(hashStr string) ([]byte, error) {
+	return hex.DecodeString(hashStr)
 }
 
 // MultiHash is a wrapper of Hash for [][]byte hash calculation.
