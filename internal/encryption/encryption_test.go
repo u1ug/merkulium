@@ -92,7 +92,7 @@ func TestSign1(t *testing.T) {
 	}
 
 	testStruct := newTestEntity()
-	dataHash := MultiHash(testStruct.GetFields())
+	dataHash := BatchHash(testStruct.GetFields())
 	dataSign, err := MultiSign(testStruct.GetFields(), key)
 	if err != nil {
 		panic(err)
@@ -116,7 +116,7 @@ func TestSign2(t *testing.T) {
 	}
 
 	testStruct := newTestEntity()
-	dataHash := MultiHash(testStruct.GetFields())
+	dataHash := BatchHash(testStruct.GetFields())
 	dataSign, err := MultiSign(testStruct.GetFields(), key)
 	if err != nil {
 		panic(err)

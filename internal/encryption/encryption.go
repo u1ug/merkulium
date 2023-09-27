@@ -72,8 +72,8 @@ func DeserializeHash(hashStr string) ([]byte, error) {
 	return hex.DecodeString(hashStr)
 }
 
-// MultiHash is a wrapper of Hash for [][]byte hash calculation.
-func MultiHash(data [][]byte) []byte {
+// BatchHash calculates hash for multiple byte slices placed in the batch one.
+func BatchHash(data [][]byte) []byte {
 	dataRow := bytes.Join(data, nil)
 	return Hash(dataRow)
 }
