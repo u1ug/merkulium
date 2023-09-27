@@ -2,6 +2,7 @@ package utils
 
 import (
 	"crypto/rand"
+	"encoding/base64"
 	"encoding/binary"
 )
 
@@ -21,4 +22,8 @@ func RandomBytes(length uint) []byte {
 	}
 
 	return randomSequence
+}
+
+func ToBase64(data []byte) string {
+	return base64.URLEncoding.EncodeToString(data)
 }
