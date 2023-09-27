@@ -1,4 +1,4 @@
-package blockchain
+package user
 
 import (
 	"encoding/json"
@@ -18,7 +18,7 @@ func (u User) GetFields() [][]byte {
 	return [][]byte{u.Address, u.Password}
 }
 
-func NewUser(address []byte, password []byte) *User {
+func NewUser() *User {
 	address, password, err := encryption.GenerateUserKeys()
 	if err != nil {
 		panic(err)

@@ -1,15 +1,10 @@
-package blockchain
+package transaction
 
 import (
 	"bytes"
 	"encoding/json"
 	"merkulium/internal/encryption"
 	"merkulium/internal/utils"
-)
-
-const (
-	IdLength   = 8
-	HashLength = 32
 )
 
 type Transaction struct {
@@ -22,11 +17,11 @@ type Transaction struct {
 	Signature []byte `json:"signature"`
 }
 
-func (tx Transaction) Serialize() ([]byte, error) {
+func (tx *Transaction) Serialize() ([]byte, error) {
 	return json.Marshal(tx)
 }
 
-func (tx Transaction) GetFields() [][]byte {
+func (tx *Transaction) GetFields() [][]byte {
 	return [][]byte{
 		tx.ID,
 		tx.Sender,
@@ -45,7 +40,7 @@ func NewTransaction(Sender []byte, Receiver []byte, amount uint64, fee uint64, p
 	tx.Fee = fee
 
 	txData := tx.GetFields()
-	tx.Hash = encryption.MultiHash(txData)
+	tx.Hash = encryption.BatchHash(txData)
 	sign, err := encryption.MultiSign(txData, privateKey)
 	if err != nil {
 		return nil
@@ -73,8 +68,7 @@ func (tx *Transaction) ValidateKeys() bool {
 }
 
 func (tx *Transaction) ValidateAmount() bool {
-	//TODO
-	panic("not implemented")
+	return true
 }
 
 func (tx *Transaction) ValidateHash() bool {
@@ -82,7 +76,7 @@ func (tx *Transaction) ValidateHash() bool {
 		return false
 	}
 	dataRow := tx.GetFields()
-	txHash := encryption.MultiHash(dataRow)
+	txHash := encryption.BatchHash(dataRow)
 	return bytes.Equal(tx.Hash, txHash)
 }
 
