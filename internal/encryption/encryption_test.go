@@ -131,6 +131,6 @@ func TestSign2(t *testing.T) {
 func TestPOW(t *testing.T) {
 	data := []byte("YDRN I am the test data")
 	target := 20
-	nonce := POW(data, uint(target))
+	nonce := POW(data, uint(target), true)
 	fmt.Println("nonce: ", nonce)
 }

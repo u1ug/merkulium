@@ -8,7 +8,7 @@ import (
 )
 
 // POW computes proof-of-work puzzle and returns first solution found.
-func POW(data []byte, diff uint) uint64 {
+func POW(data []byte, diff uint, verbose bool) uint64 {
 	var (
 		nonce   uint64
 		hashInt big.Int
@@ -19,7 +19,9 @@ func POW(data []byte, diff uint) uint64 {
 		binary.LittleEndian.PutUint64(nonceBytes, nonce)
 		hash := append(data, nonceBytes...)
 		hash = Hash(hash)
-		fmt.Printf("\rmining: %v, nonce %d", utils.ToBase64(hash), nonce)
+		if verbose {
+			fmt.Printf("\rmining: %v, nonce %d", utils.ToBase64(hash), nonce)
+		}
 		hashInt.SetBytes(hash)
 		if hashInt.Cmp(target) == -1 {
 			return nonce
