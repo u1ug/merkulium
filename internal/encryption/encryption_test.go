@@ -5,6 +5,7 @@ import (
 	"crypto/rand"
 	"encoding/json"
 	"fmt"
+	"math/big"
 	"testing"
 )
 
@@ -126,4 +127,11 @@ func TestSign2(t *testing.T) {
 	if err == nil {
 		println("verification failed")
 	}
+}
+
+func TestPOW(t *testing.T) {
+	data := []byte("YDRN I am the test data")
+	target := big.NewInt(100)
+	nonce := POW(data, target)
+	fmt.Println("nonce: ", nonce)
 }

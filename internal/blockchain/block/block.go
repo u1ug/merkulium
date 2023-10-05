@@ -13,7 +13,7 @@ type Header struct {
 	Height    uint64            // Block number
 	Timestamp int64             // Unix time when block was mined
 	Diff      uint64            // Block PoW target difficulty
-	Nonce     int64             // PoW puzzle solution
+	Nonce     uint64            // PoW puzzle solution
 	Miner     []byte            // Block issuer public key
 	Hash      []byte            // Block hash
 	PrevHash  []byte            // Previous block hash
