@@ -13,7 +13,7 @@ type Transaction struct {
 	Receiver  []byte `json:"receiver"`
 	Amount    uint64 `json:"amount"`
 	Fee       uint64 `json:"fee"`
-	Hash      []byte `json:"hash"`
+	HashSum   []byte `json:"hashSum"`
 	Signature []byte `json:"signature"`
 }
 
@@ -40,7 +40,7 @@ func NewTransaction(Sender []byte, Receiver []byte, amount uint64, fee uint64, p
 	tx.Fee = fee
 
 	txData := tx.GetFields()
-	tx.Hash = encryption.BatchHash(txData)
+	tx.HashSum = encryption.BatchHash(txData)
 	sign, err := encryption.MultiSign(txData, privateKey)
 	if err != nil {
 		return nil
@@ -72,17 +72,17 @@ func (tx *Transaction) ValidateAmount() bool {
 }
 
 func (tx *Transaction) ValidateHash() bool {
-	if len(tx.Hash) != HashLength {
+	if len(tx.HashSum) != HashLength {
 		return false
 	}
 	dataRow := tx.GetFields()
 	txHash := encryption.BatchHash(dataRow)
-	return bytes.Equal(tx.Hash, txHash)
+	return bytes.Equal(tx.HashSum, txHash)
 }
 
 // ValidateSign method requires non-empty and verified hash field before calling.
 func (tx *Transaction) ValidateSign() bool {
-	return encryption.VerifySign(tx.Sender, tx.Hash, tx.Signature) != nil
+	return encryption.VerifySign(tx.Sender, tx.HashSum, tx.Signature) != nil
 }
 
 func (tx *Transaction) Validate() bool {
